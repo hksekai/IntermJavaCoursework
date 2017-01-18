@@ -2,10 +2,21 @@ package com.pieong.assignment1;
 
 public class Hand {
 	Card[] myCards;
-	static final int MAX_CARDS = 30;
+	static int numCards;
+	public static final int MAX_CARDS = 30;
 	
 	public Hand(){
 		myCards = new Card[MAX_CARDS];
+	}
+	
+	public Hand(int size){
+		
+		if(size == 0 || size > MAX_CARDS){
+			System.out.println("Invalid hand");
+		}else{
+			myCards = new Card[size];
+		}
+		
 	}
 	
 	public void resetHand(){
@@ -14,28 +25,21 @@ public class Hand {
 	
 	public boolean takeCard(Card card){
 		
-		// If errorFlag = false (card has error) return false;
-		if(card.errorFlag == false){
+		// find the next available position in myCards
+		int index = numCards() ;
+		
+		// if index is greater than max cards return false
+		if(index >= MAX_CARDS){
 			return false;
 		}
-		
-		// Find the first index where myCards is null and insert 
-		for(int i = 0; i < myCards.length; i++){
-			
-			// if iterator goes past max cards, return false;
-			if(i > MAX_CARDS){
-				return false;
-			}
-			
-			if(myCards[i] == null){
-				System.out.println("index "  + i + " is null. adding card: "  + card.toString());
-				myCards[i] = card;
-				break;
-			}
-			
+		// insert card into last available index
+		else{
+			myCards[index] = card;
+			return true;
 		}
 		
-		return true;
+		
+		
 	}
 	
 	public String toString(){
@@ -43,40 +47,50 @@ public class Hand {
 		String hand = "";
 	
 		// Iterate through myCards array
-		for(int i = 0; i<myCards.length; i++){
+		for(int i = 0; i<numCards(); i++){
 			
-			// Add only cards at index that is not empty
-			if(myCards[i] != null) {
-				hand = hand + myCards[i].toString() + ",";
-			}
+			hand = hand + myCards[i].toString() + ",";
 		}
 		
 		// Remove trailing  comma
 		hand = hand.replaceAll(",$", "");
 		
 		// Insert output string into parenthesis
-		hand = "(" + hand + ")";
+		hand = "Hand =  (" + hand + ")";
 		return hand;
 	}
-	/*
-	public Card playCard(){
-		
-	}*/
 	
-	public static void main(String[] args){
-		
-		Hand hand = new Hand();
-		Card card = new Card('A', Suit.Diamonds);
-		Card card2 = new Card('3', Suit.Clubs);
-		Card card3 = new Card('c', Suit.Spades);
-		
-		hand.takeCard(card);
-		hand.takeCard(card2);
-		hand.takeCard(card3);
-		System.out.println(hand.toString());
-		
-		hand.resetHand();
-		
-		System.out.println(hand.toString());
+	public int numCards(){
+		int index = 0;
+		for(int i = 0; i < myCards.length; i++){
+			if(myCards[i] != null){
+				index++;
+			}
+		}
+		numCards = index;
+		return numCards;
 	}
+	
+	public Card playCard(){
+		int lastCard = numCards() - 1;
+		Card drawCard = myCards[lastCard];
+		myCards[lastCard] = null;
+		
+		return drawCard;
+		
+	}
+	
+	public Card inspectCard(int k){
+		
+		Card dummy = new Card('C', Suit.Clubs);
+		
+		if(k > numCards() -1 ){
+			return dummy;
+		}
+		
+		return myCards[k];
+		
+		
+	}
+
 }

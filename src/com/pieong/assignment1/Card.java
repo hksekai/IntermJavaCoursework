@@ -28,7 +28,7 @@ public class Card {
 	
 	public String toString(){
 		
-		if(errorFlag == false){
+		if(errorFlag == true){
 			return "** illegal **";
 		}
 		else{
@@ -37,7 +37,7 @@ public class Card {
 		
 	}
 	
-	public static boolean isValid(char value, Suit suit){
+	private static boolean isValid(char value, Suit suit){
 		
 		boolean isValid = false;
 		char[] lookup = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
@@ -54,14 +54,25 @@ public class Card {
 	public boolean set(char value, Suit suit){
 		
 		// check if value is valid
-		errorFlag = isValid(value, suit);
-		
-		this.value = value;
-		this.suit = suit;
+		if(isValid(value, suit)){
+			this.value = value;
+			this.suit = suit;
+			errorFlag = false;
+		}
+		else{
+			errorFlag = true;
+		}
 		
 		return errorFlag;
-		
-		
+	}
+	
+	public boolean equals(Card card){
+		if(card.value == this.value && card.suit == this.suit){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	// Accessors
