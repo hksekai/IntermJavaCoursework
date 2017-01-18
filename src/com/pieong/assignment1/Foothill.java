@@ -1,6 +1,6 @@
 package com.pieong.assignment1;
 
-public class main {
+public class Foothill {
 
 	public static void main(String[] args) {
 		
